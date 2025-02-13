@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from Utils.UniqueList import UniqueList
-
 if TYPE_CHECKING:
     from Libs.Post import Post
 
@@ -14,7 +12,7 @@ class User:
         self.__Name: str = username
         self.__Email: str = email
         self.__PasswordHash: str = password # FARE HASH
-        self.__Posts: UniqueList[Post] = UniqueList([])
+        self.Posts: list[Post] = []
     
     @staticmethod
     def Register(username: str, email: str, password: str):
