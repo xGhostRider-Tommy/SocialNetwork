@@ -5,7 +5,7 @@ import random
 
 from Libs.Hashtag import Hashtag
 from Utils.UniqueList import UniqueList
-
+#from Libs.User import User # added at the end for circular import
 
 class Post:
     __POSTS_DIRECTORY: str = "Data/Posts/"
@@ -83,4 +83,5 @@ class Post:
         for hashtagString in hashtagsStrings:
             hashtags.Add(Hashtag.getHashtag(hashtagString))
         return hashtags
+
 from Libs.User import User

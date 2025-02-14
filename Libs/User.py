@@ -5,7 +5,7 @@ import csv
 from Libs.Hashtag import Hashtag
 from Utils.Hash import Hash, CheckHash
 from Utils.UniqueList import UniqueList
-
+#from Libs.Post import Post # added at the end for circular import
 
 class User:
     __USERS_FILE = "Data/users.csv"
@@ -89,4 +89,5 @@ class User:
             if post.User == self:
                 userPosts.append(post)
         return userPosts
+
 from Libs.Post import Post
