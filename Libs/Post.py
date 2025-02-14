@@ -2,13 +2,9 @@ from __future__ import annotations
 
 import os
 import random
-from typing import TYPE_CHECKING
 
 from Libs.Hashtag import Hashtag
-
-if TYPE_CHECKING:
-    from Libs.User import User
-    from Utils.UniqueList import UniqueList
+from Utils.UniqueList import UniqueList
 
 class Post:
     __POSTS_DIRECTORY: str = "Data\\Posts\\"
@@ -34,11 +30,11 @@ class Post:
 
         # salva gli altri dati nel disco
         postDirectory: str = Post.__POSTS_DIRECTORY + id
-        os.makedirs(postDirectory)
+        os.mkdir(postDirectory)
         file = open(postDirectory + "\\info.txt", "w")
 
-        file.write(user.Name)
-        file.write(description)
+        file.write(user.Name + "\n")
+        file.write(description + "\n")
 
         hashtagsString: str = ""
         if len(hashtags) != 0:
@@ -53,7 +49,7 @@ class Post:
 
     @staticmethod
     def getPosts() -> list[Post]:
-        postsIds: list[str] = os.walk(Post.__POSTS_DIRECTORY)[1]
+        postsIds: list[str] = os.listdir(Post.__POSTS_DIRECTORY)
         posts: list[Post] = []
 
         for id in postsIds:
@@ -75,7 +71,8 @@ class Post:
 
     @property
     def Description(self) -> str:
-        return self.getContent()[1]
+        a = self.getContent()
+        return a[1]
 
     @property
     def Hashtags(self) -> UniqueList[Hashtag]:
@@ -85,3 +82,4 @@ class Post:
         for hashtagString in hashtagsStrings:
             hashtags.Add(Hashtag.getHashtag(hashtagString))
         return hashtags
+from Libs.User import User

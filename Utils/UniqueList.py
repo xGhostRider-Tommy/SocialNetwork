@@ -20,6 +20,16 @@ class UniqueList(Generic[T]):
     
     def __iter__(self) -> Iterator[T]:
         return iter(self.__List)
+
+    def __str__(self) -> str:
+        string: str = "["
+
+        for element in self.__List:
+            string += str(element) + ", "
+        string = string[:-2] # leva gli ultimi due caratteri
+        string += "]"
+
+        return string
     
     def Add(self, element: T) -> bool:
         condition: bool = element not in self.__List

@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import csv
-from typing import TYPE_CHECKING
 
 from Libs.Hashtag import Hashtag
 from Utils.Hash import Hash, CheckHash
 from Utils.UniqueList import UniqueList
 
-if TYPE_CHECKING:
-    from Libs.Post import Post
 
 class User:
     __USERS_FILE = "Data\\users.csv"
@@ -27,7 +24,7 @@ class User:
         passwordHash: str = Hash(password)
 
         file = open(User.__USERS_FILE, "a")
-        file.write(f"{name};{email};{passwordHash}")
+        file.write(f"{name};{email};{passwordHash}\n")
 
         file.close()
 
@@ -47,13 +44,13 @@ class User:
                 break
 
         if userExists:
-            if CheckHash(password, User.HashedPassword):
+            if CheckHash(password, currentUser.HashedPassword):
                 return currentUser
         return userExists
 
     @staticmethod
     def getUsers() -> list[User]:
-        file = csv.reader(open(User.__USERS_FILE, "r"))
+        file = csv.reader(open(User.__USERS_FILE, "r",), delimiter=";")
         users: list[User] = []
 
         for line in file:
@@ -61,10 +58,10 @@ class User:
         return users
 
     def getContent(self) -> list[str]:
-        file = csv.reader(open(User.__USERS_FILE, "r"))
+        file = csv.reader(open(User.__USERS_FILE, "r"), delimiter=";")
 
         for line in file:
-            if line[0] == self.__Name:
+            if line[0] == self.Name:
                 return line
         return [] # u should never reach this, but who knows, world is strange sometimes
 
@@ -72,15 +69,15 @@ class User:
         Post.CreatePost(self, description, hashtags)
 
     @property
-    def Name(self):
+    def Name(self) -> str:
         return self.__Name
 
     @property
-    def Email(self):
+    def Email(self) -> str:
         return self.getContent()[1]
 
     @property
-    def HashedPassword(self):
+    def HashedPassword(self) -> str:
         return self.getContent()[2]
 
     @property
@@ -92,3 +89,4 @@ class User:
             if post.User == self:
                 userPosts.append(post)
         return userPosts
+from Libs.Post import Post

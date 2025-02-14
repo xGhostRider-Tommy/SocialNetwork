@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import bcrypt
 
-
 def Hash(string: str) -> str:
     byteString: bytes = string.encode("utf-8")
 

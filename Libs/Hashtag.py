@@ -21,6 +21,9 @@ class Hashtag:
         hashtag.__Text = lowerText
         return hashtag
 
+    def __str__(self) -> str:
+        return self.__Text
+
     @property
     def Text(self):
         return self.__Text
