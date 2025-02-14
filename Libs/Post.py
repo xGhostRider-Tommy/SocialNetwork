@@ -1,63 +1,87 @@
 from __future__ import annotations
-import random
 
+import os
+import random
 from typing import TYPE_CHECKING
+
+from Libs.Hashtag import Hashtag
 
 if TYPE_CHECKING:
     from Libs.User import User
     from Utils.UniqueList import UniqueList
 
 class Post:
+    __POSTS_DIRECTORY: str = "Data\\Posts\\"
     __CHARS: str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
-    Posts: list[Post] = []
-
-    def __init__(self, user: User, text: str, hashtags: UniqueList[str], id: str):
-        self.__User: User = user
-        self.__Text: str = text
+    # do not use this
+    def __init__(self, id: str):
         self.__Id: str = id
-        self.__Hashtags: UniqueList[str] = hashtags
-        self.Posts.append(self)
 
+    # use this
     @staticmethod
-    def AddPost(user: User, text: str, hashtags: UniqueList[str]) -> Post:
-        currentId: str = ""
+    def CreatePost(user: User, description: str, hashtags: UniqueList[Hashtag]) -> Post:
+        id: str = "" # placeholder
         notUnique: bool = True
 
         while notUnique:
-            currentId = "".join(random.choice(Post.__CHARS) for _ in range(16))
+            id = "".join(random.choice(Post.__CHARS) for _ in range(16)) # random id
 
             notUnique = False
-            for post in Post.Posts:
-                if post.__Id == currentId:
+            for post in Post.getPosts():
+                if post.__Id == id:
                     notUnique = True
 
-        return Post(user, text, hashtags, currentId)
-    
-    def getUser(self) -> User:
-        return self.__User
-    
-    def getText(self) -> str:
-        return self.__Text
-    
-    def getHashtags(self) -> UniqueList[str]:
-        return self.__Hashtags
+        # salva gli altri dati nel disco
+        postDirectory: str = Post.__POSTS_DIRECTORY + id
+        os.makedirs(postDirectory)
+        file = open(postDirectory + "\\info.txt", "w")
 
-    def getId(self) -> str:
-        return self.__Id
-    
-    User = property(
-        fget = getUser
-    )
-    
-    Text = property(
-        fget = getText
-    )
-    
-    Hashtags = property(
-        fget = getHashtags
-    )
+        file.write(user.Name)
+        file.write(description)
 
-    Id = property(
-        fget = getId
-    )
+        hashtagsString: str = ""
+        if len(hashtags) != 0:
+            for hashtag in hashtags:
+                hashtagsString += hashtag.Text + " "
+            hashtagsString = hashtagsString[:-1]  # leva l'ultimo spazio
+        file.write(hashtagsString)
+
+        file.close()
+
+        return Post(id)
+
+    @staticmethod
+    def getPosts() -> list[Post]:
+        postsIds: list[str] = os.walk(Post.__POSTS_DIRECTORY)[1]
+        posts: list[Post] = []
+
+        for id in postsIds:
+            posts.append(Post(id))
+        return posts
+
+    def getContent(self) -> list[str]:
+        file = open(self.__POSTS_DIRECTORY + self.__Id + "\\info.txt", "r")
+        return file.read().split("\n")
+
+    @property
+    def User(self) -> User | None:
+        username = self.getContent()[0]
+
+        for user in User.getUsers():
+            if user.Name == username:
+                return user
+        return None
+
+    @property
+    def Description(self) -> str:
+        return self.getContent()[1]
+
+    @property
+    def Hashtags(self) -> UniqueList[Hashtag]:
+        hashtagsStrings: list[str] = self.getContent()[2].split(" ")
+        hashtags: UniqueList[Hashtag] = UniqueList([])
+
+        for hashtagString in hashtagsStrings:
+            hashtags.Add(Hashtag.getHashtag(hashtagString))
+        return hashtags
