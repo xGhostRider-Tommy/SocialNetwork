@@ -8,7 +8,7 @@ from Utils.UniqueList import UniqueList
 
 
 class User:
-    __USERS_FILE = "Data\\users.csv"
+    __USERS_FILE = "Data/users.csv"
 
     # do not use this
     def __init__(self, name: str):

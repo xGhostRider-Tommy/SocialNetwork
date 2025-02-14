@@ -6,8 +6,9 @@ import random
 from Libs.Hashtag import Hashtag
 from Utils.UniqueList import UniqueList
 
+
 class Post:
-    __POSTS_DIRECTORY: str = "Data\\Posts\\"
+    __POSTS_DIRECTORY: str = "Data/Posts/"
     __CHARS: str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 
     # do not use this
@@ -31,7 +32,7 @@ class Post:
         # salva gli altri dati nel disco
         postDirectory: str = Post.__POSTS_DIRECTORY + id
         os.mkdir(postDirectory)
-        file = open(postDirectory + "\\info.txt", "w")
+        file = open(postDirectory + "/info.txt", "w")
 
         file.write(user.Name + "\n")
         file.write(description + "\n")
@@ -57,7 +58,7 @@ class Post:
         return posts
 
     def getContent(self) -> list[str]:
-        file = open(self.__POSTS_DIRECTORY + self.__Id + "\\info.txt", "r")
+        file = open(self.__POSTS_DIRECTORY + self.__Id + "/info.txt", "r")
         return file.read().split("\n")
 
     @property

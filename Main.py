@@ -1,9 +1,10 @@
 import os
 
-from Libs.Post import Post
 from Libs.Hashtag import Hashtag
+from Libs.Post import Post
 from Libs.User import User
 from Utils.UniqueList import UniqueList
+
 
 # RESET FOR TESTING THINGS
 def Reset(wait: bool):
@@ -16,8 +17,8 @@ def Reset(wait: bool):
 # GENERATE DATA DEFAULT CONTENTS IF NOT EXISTS
 if not os.path.exists("Data"):
     os.mkdir("Data")
-    os.mkdir("Data\\Posts")
-    file = open("Data\\users.csv", "w")
+    os.mkdir("Data/Posts")
+    file = open("Data/users.csv", "w")
     file.write("")
     file.close()
 
