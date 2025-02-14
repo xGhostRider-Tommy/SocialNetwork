@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 class Hashtag:
-
     __VALID_CHARS: str = "abcdefghijklmnopqrstuvwxyz1234567890"
 
     # do not use this
