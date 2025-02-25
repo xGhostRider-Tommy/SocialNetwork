@@ -3,9 +3,9 @@ from __future__ import annotations
 import os
 import random
 
-from Libs.Hashtag import Hashtag
+from SocialNetwork.Hashtag import Hashtag
 from Utils.UniqueList import UniqueList
-#from Libs.User import User # added at the end for circular import
+#from SocialNetwork.User import User # added at the end for circular import
 
 class Post:
     __POSTS_DIRECTORY: str = "Data/Posts/"
@@ -86,4 +86,4 @@ class Post:
             hashtags.Add(Hashtag.getHashtag(hashtagString))
         return hashtags
 
-from Libs.User import User
+from SocialNetwork.User import User

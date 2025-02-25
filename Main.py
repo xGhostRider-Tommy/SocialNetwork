@@ -1,8 +1,8 @@
 import os
 
-from Libs.Hashtag import Hashtag
-from Libs.Post import Post
-from Libs.User import User
+from SocialNetwork.Hashtag import Hashtag
+from SocialNetwork.Post import Post
+from SocialNetwork.User import User
 from Utils.UniqueList import UniqueList
 
 
