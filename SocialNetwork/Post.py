@@ -5,6 +5,8 @@ import random
 
 from SocialNetwork.Hashtag import Hashtag
 from Utils.UniqueList import UniqueList
+
+
 #from SocialNetwork.User import User # added at the end for circular import
 
 class Post:
@@ -45,8 +47,6 @@ class Post:
         file.write(hashtagsString)
 
         file.close()
-
-
 
         return Post(id)
 
