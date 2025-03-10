@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import os
-import random
 
 from SocialNetwork.Hashtag import Hashtag
+from Utils.Random import RandomStr
 from Utils.UniqueList import UniqueList
 
 
@@ -11,11 +11,13 @@ from Utils.UniqueList import UniqueList
 
 class Post:
     __POSTS_DIRECTORY: str = "Data/Posts/"
-    __CHARS: str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    __POST_ID_LENGTH: int = 16
+
+    __Id: str
 
     # do not use this
     def __init__(self, id: str):
-        self.__Id: str = id
+        self.__Id = id
 
     # use this
     @staticmethod
@@ -24,7 +26,7 @@ class Post:
         notUnique: bool = True
 
         while notUnique:
-            id = "".join(random.choice(Post.__CHARS) for _ in range(16)) # random id
+            id = RandomStr(Post.__POST_ID_LENGTH)
 
             notUnique = False
             for post in Post.getPosts():

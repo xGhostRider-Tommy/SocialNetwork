@@ -22,11 +22,15 @@ if not os.path.exists("Data"):
     file.write("")
     file.close()
 
-a = User.Register("ciao", "ciao@example.com", "ciao123")
+User.Register("ciao", "ciao@example.com", "ciao123")
+
+sessionID = User.Login("ciao", "ciao123")
+a = User.Authenticate("ciao", sessionID)
+
 
 a.AddPost("ciaooo", UniqueList([Hashtag.getHashtag("myhashtag"), Hashtag.getHashtag("boh")]))
 
 print(Post.getPosts()[0].Description, Post.getPosts()[0].User.Name, Post.getPosts()[0].Hashtags)
-#print(a.Posts[0].Description)
+print(a.Posts[0].Description)
 
 Reset(False)

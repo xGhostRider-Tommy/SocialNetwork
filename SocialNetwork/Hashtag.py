@@ -3,9 +3,11 @@ from __future__ import annotations
 class Hashtag:
     __VALID_CHARS: str = "abcdefghijklmnopqrstuvwxyz1234567890"
 
+    __Text: str
+
     # do not use this
     def __init__(self):
-        self.__Text: str = "hashtag" # placeholder
+        pass
 
     # use this
     @staticmethod

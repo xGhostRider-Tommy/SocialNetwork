@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import bcrypt
 
+
 def Hash(string: str) -> str:
     byteString: bytes = string.encode("utf-8")
 
@@ -10,8 +11,8 @@ def Hash(string: str) -> str:
 
     return hash.decode("utf-8")
 
-def CheckHash(first: str, second: str) -> bool:
-    firstHash: bytes = first.encode("utf-8")
-    secondHash: bytes = second.encode("utf-8")
+def CheckHash(unhashed: str, hashed: str) -> bool:
+    firstHash: bytes = unhashed.encode("utf-8")
+    secondHash: bytes = hashed.encode("utf-8")
 
     return bcrypt.checkpw(firstHash, secondHash)
