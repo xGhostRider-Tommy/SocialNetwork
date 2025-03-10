@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 
 
+# secure random string
 def RandomStr(length: int) -> str:
     CHARS: str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
     CHARS_LENGTH: int = len(CHARS)
