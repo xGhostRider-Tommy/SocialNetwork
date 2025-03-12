@@ -21,17 +21,16 @@ class Post:
 
     # use this
     @staticmethod
-    def CreatePost(user: User, description: str, hashtags: UniqueList[Hashtag]) -> Post:
-        id: str = "" # placeholder
-        notUnique: bool = True
+    def CreatePost(user: User, description: str, hashtags: UniqueList[Hashtag]) -> Post: # placeholder
+        postIds: list[str] = os.listdir(Post.__POSTS_DIRECTORY)
+        id: str
 
-        while notUnique:
-            id = RandomStr(Post.__POST_ID_LENGTH)
+        if len(postIds) == 0:
+            id = "0"
+        else:
+            postIds.sort(reverse=True)
+            id = str(int(postIds[0]) + 1)
 
-            notUnique = False
-            for post in Post.getPosts():
-                if post.__Id == id:
-                    notUnique = True
 
         # salva gli altri dati nel disco
         postDirectory: str = Post.__POSTS_DIRECTORY + id
