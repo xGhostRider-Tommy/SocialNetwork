@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from SocialNetwork.Hashtag import Hashtag
 from Utils.Hash import Hash, CheckHash
+from Utils.Image import Image
 from Utils.Random import RandomStr
 from Utils.UniqueList import UniqueList
 
@@ -91,8 +92,8 @@ class User:
                 return line
         return [] # u should never reach this, but who knows, world is strange sometimes
 
-    def AddPost(self, description: str, hashtags: UniqueList[Hashtag]):
-        Post.CreatePost(self, description, hashtags)
+    def AddPost(self, description: str, hashtags: UniqueList[Hashtag], images: list[Image]):
+        Post.CreatePost(self, description, hashtags, images)
 
     # can handle only one sessionID a time
     def GenerateSessionID(self) -> str:

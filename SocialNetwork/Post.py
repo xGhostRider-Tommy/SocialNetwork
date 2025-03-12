@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 
 from SocialNetwork.Hashtag import Hashtag
-from Utils.Random import RandomStr
+from Utils.Image import Image
 from Utils.UniqueList import UniqueList
 
 
@@ -12,6 +12,8 @@ from Utils.UniqueList import UniqueList
 class Post:
     __POSTS_DIRECTORY: str = "Data/Posts/"
     __POST_ID_LENGTH: int = 16
+    __INFO_FILE_NAME: str = "info.txt"
+    __MAX_IMAGES_PER_POST: int = 10
 
     __Id: str
 
@@ -21,9 +23,10 @@ class Post:
 
     # use this
     @staticmethod
-    def CreatePost(user: User, description: str, hashtags: UniqueList[Hashtag]) -> Post: # placeholder
-        postIds: list[str] = os.listdir(Post.__POSTS_DIRECTORY)
+    def CreatePost(user: User, description: str, hashtags: UniqueList[Hashtag], images: list[Image]) -> Post:
         id: str
+        imagesCount: int
+        postIds: list[str] = os.listdir(Post.__POSTS_DIRECTORY)
 
         if len(postIds) == 0:
             id = "0"
@@ -35,7 +38,7 @@ class Post:
         # salva gli altri dati nel disco
         postDirectory: str = Post.__POSTS_DIRECTORY + id
         os.mkdir(postDirectory)
-        file = open(postDirectory + "/info.txt", "w")
+        file = open(postDirectory + "/" + Post.__INFO_FILE_NAME, "w")
 
         file.write(user.Name + "\n")
         file.write(description + "\n")
@@ -46,8 +49,17 @@ class Post:
                 hashtagsString += hashtag.Text + " "
             hashtagsString = hashtagsString[:-1]  # leva l'ultimo spazio
         file.write(hashtagsString)
-
         file.close()
+
+        if len(images) <= Post.__MAX_IMAGES_PER_POST:
+            imagesCount = len(images)
+        else:
+            imagesCount = Post.__MAX_IMAGES_PER_POST
+
+        for i in range(imagesCount):
+            file = open(postDirectory + "/" + str(i) + "." + images[i].Extension, "wb")
+            file.write(images[i].Content)
+            file.close()
 
         return Post(id)
 
@@ -61,7 +73,7 @@ class Post:
         return posts
 
     def getContent(self) -> list[str]:
-        file = open(self.__POSTS_DIRECTORY + self.__Id + "/info.txt", "r")
+        file = open(self.__POSTS_DIRECTORY + self.__Id + "/" + self.__INFO_FILE_NAME, "r")
         return file.read().split("\n")
 
     @property
@@ -86,5 +98,16 @@ class Post:
         for hashtagString in hashtagsStrings:
             hashtags.Add(Hashtag.getHashtag(hashtagString))
         return hashtags
+
+    @property
+    def Photos(self) -> list[Image]:
+        imagesFiles: list[str] = os.listdir(self.__POSTS_DIRECTORY + self.__Id + "/")
+        imagesFiles.remove(self.__INFO_FILE_NAME)
+
+        images: list[Image] = []
+
+        for imageName in imagesFiles:
+            images.append(Image(imageName.split(".")[1], open(imageName, "rb").read()))
+        return images
 
 from SocialNetwork.User import User

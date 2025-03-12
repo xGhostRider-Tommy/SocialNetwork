@@ -28,7 +28,7 @@ sessionID = User.Login("ciao", "ciao123")
 a = User.Authenticate("ciao", sessionID)
 
 
-a.AddPost("ciaooo", UniqueList([Hashtag.getHashtag("myhashtag"), Hashtag.getHashtag("boh")]))
+a.AddPost("ciaooo", UniqueList([Hashtag.getHashtag("myhashtag"), Hashtag.getHashtag("boh")]), [])
 
 print(Post.getPosts()[0].Description, Post.getPosts()[0].User.Name, Post.getPosts()[0].Hashtags)
 print(a.Posts[0].Description)
