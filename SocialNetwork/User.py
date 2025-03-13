@@ -92,9 +92,6 @@ class User:
                 return line
         return [] # u should never reach this, but who knows, world is strange sometimes
 
-    def AddPost(self, description: str, hashtags: UniqueList[Hashtag], images: list[Image]):
-        Post.CreatePost(self, description, hashtags, images)
-
     # can handle only one sessionID a time
     def GenerateSessionID(self) -> str:
         sessionID: str = RandomStr(self.__SESSION_ID_LENGTH)
@@ -114,6 +111,15 @@ class User:
         file.close()
 
         return sessionID
+
+    def AddPost(self, description: str, hashtags: UniqueList[Hashtag], images: list[Image]):
+        Post.CreatePost(self, description, hashtags, images)
+
+    def Like(self, post: Post):
+        post.Like(self)
+
+    def Unlike(self, post: Post):
+        post.Unlike(self)
 
     @property
     def Name(self) -> str:

@@ -49,6 +49,8 @@ class Post:
                 hashtagsString += hashtag.Text + " "
             hashtagsString = hashtagsString[:-1]  # leva l'ultimo spazio
         file.write(hashtagsString)
+
+        file.write("\n") # for likes
         file.close()
 
         if len(images) <= Post.__MAX_IMAGES_PER_POST:
@@ -63,6 +65,7 @@ class Post:
 
         return Post(id)
 
+    # NON ordinati
     @staticmethod
     def getPosts() -> list[Post]:
         postsIds: list[str] = os.listdir(Post.__POSTS_DIRECTORY)
@@ -72,9 +75,75 @@ class Post:
             posts.append(Post(id))
         return posts
 
+    # most recent first
+    @staticmethod
+    def getPostsByDate() -> list[Post]:
+        posts: list[Post] = Post.getPosts()
+        posts.sort(key=lambda x: int(x.Id), reverse=True) # ordina in base all'id come int + reverse
+
+        return posts
+
+    @staticmethod
+    def getPostsByHashtag(hashtag: Hashtag):
+        allPosts: list[Post] = Post.getPosts()
+        posts: list[Post] = []
+
+        for post in allPosts:
+            for postHashtag in post.Hashtags:
+                if postHashtag == hashtag:
+                    posts.append(post)
+                    break
+        return posts
+
+    def Like(self, user: User):
+        if not self.HasLiked(user):
+            fileContent: list[str] = self.getContent()
+            fileContent[3] += " " + user.Name
+
+            file = open(self.__POSTS_DIRECTORY + self.Id + "/" + self.__INFO_FILE_NAME, "w")
+            file.write(fileContent[0] + "\n")
+            file.write(fileContent[1] + "\n")
+            file.write(fileContent[2] + "\n")
+            file.write(fileContent[3])
+            file.close()
+
+    def Unlike(self, user: User):
+        if self.HasLiked(user):
+            fileContent: list[str] = self.getContent()
+            userNames: list[str] = fileContent[3].split(" ")
+            userNames.remove(user.Name)
+
+            for userName in userNames:
+                fileContent[3] += userName + " "
+            fileContent[3] = fileContent[3][:-1] # remove last element
+
+            file = open(self.__POSTS_DIRECTORY + self.Id + "/" + self.__INFO_FILE_NAME, "w")
+            file.write(fileContent[0] + "\n")
+            file.write(fileContent[1] + "\n")
+            file.write(fileContent[2] + "\n")
+            file.write(fileContent[3])
+            file.close()
+
     def getContent(self) -> list[str]:
-        file = open(self.__POSTS_DIRECTORY + self.__Id + "/" + self.__INFO_FILE_NAME, "r")
+        file = open(self.__POSTS_DIRECTORY + self.Id + "/" + self.__INFO_FILE_NAME, "r")
         return file.read().split("\n")
+
+    def getUserLikes(self) -> list[User]:
+        users: list[User] = []
+        likesLine: list[str] = self.getContent()[3].split(" ")
+
+        if likesLine[0] != "":
+            for username in likesLine:
+                users.append(User(username))
+        return users
+
+    def HasLiked(self, user: User) -> bool:
+        users = self.getUserLikes()
+        return user in users
+
+    @property
+    def Id(self) -> str:
+        return self.__Id
 
     @property
     def User(self) -> User | None:
@@ -100,8 +169,12 @@ class Post:
         return hashtags
 
     @property
+    def Likes(self) -> int:
+        return len(self.getUserLikes())
+
+    @property
     def Photos(self) -> list[Image]:
-        imagesFiles: list[str] = os.listdir(self.__POSTS_DIRECTORY + self.__Id + "/")
+        imagesFiles: list[str] = os.listdir(self.__POSTS_DIRECTORY + self.Id + "/")
         imagesFiles.remove(self.__INFO_FILE_NAME)
 
         images: list[Image] = []

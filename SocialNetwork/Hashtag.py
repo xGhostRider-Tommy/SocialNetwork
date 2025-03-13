@@ -29,3 +29,8 @@ class Hashtag:
     @property
     def Text(self):
         return self.__Text
+
+    def __eq__(self, other):
+        if isinstance(other, Hashtag):
+            return self.Text == other.Text
+        return False
