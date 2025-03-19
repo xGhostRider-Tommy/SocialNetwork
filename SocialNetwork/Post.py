@@ -11,7 +11,6 @@ from Utils.UniqueList import UniqueList
 
 class Post:
     __POSTS_DIRECTORY: str = "Data/Posts/"
-    __POST_ID_LENGTH: int = 16
     __INFO_FILE_NAME: str = "info.txt"
     __MAX_IMAGES_PER_POST: int = 10
 
