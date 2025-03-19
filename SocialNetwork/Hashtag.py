@@ -12,7 +12,7 @@ class Hashtag:
     # use this
     @staticmethod
     def getHashtag(text: str) -> Hashtag | None:
-        lowerText = text.lower()
+        lowerText = text.lower() # mette minuscolo
         hashtag: Hashtag
 
         for c in lowerText:
