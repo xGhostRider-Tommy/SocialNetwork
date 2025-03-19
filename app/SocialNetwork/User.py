@@ -3,11 +3,11 @@ from __future__ import annotations
 import csv
 from datetime import datetime, timedelta
 
-from SocialNetwork.Hashtag import Hashtag
-from Utils.Hash import Hash, CheckHash
-from Utils.Image import Image
-from Utils.Random import RandomStr
-from Utils.UniqueList import UniqueList
+from app.SocialNetwork.Hashtag import Hashtag
+from app.Utils.Hash import Hash, CheckHash
+from app.Utils.Image import Image
+from app.Utils.Random import RandomStr
+from app.Utils.UniqueList import UniqueList
 
 
 #from SocialNetwork.Post import Post # added at the end for circular import
@@ -160,4 +160,4 @@ class User:
             return self.Name == other.Name
         return False
 
-from SocialNetwork.Post import Post
+from app.SocialNetwork.Post import Post

@@ -1,24 +1,24 @@
 import os
 
-from SocialNetwork.Hashtag import Hashtag
-from SocialNetwork.Post import Post
-from SocialNetwork.User import User
-from Utils.UniqueList import UniqueList
+from app.SocialNetwork.Hashtag import Hashtag
+from app.SocialNetwork.Post import Post
+from app.SocialNetwork.User import User
+from app.Utils.UniqueList import UniqueList
 
 
 # RESET FOR TESTING THINGS
 def Reset(wait: bool):
-    from ClearData import ClearData
+    from app.ClearData import ClearData
 
     if wait:
         input("Waiting before reset...")
     ClearData()
 
 # GENERATE DATA DEFAULT CONTENTS IF NOT EXISTS
-if not os.path.exists("Data"):
-    os.mkdir("Data")
-    os.mkdir("Data/Posts")
-    file = open("Data/users.csv", "w")
+if not os.path.exists("../Data"):
+    os.mkdir("../Data")
+    os.mkdir("../Data/Posts")
+    file = open("../Data/users.csv", "w")
     file.write("")
     file.close()
 

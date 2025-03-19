@@ -1,2 +1,2 @@
-pip3 install requirements.txt
-python main.py
+pip install requirements.txt
+/Users/tommy/Library/Python/3.9/bin/flask run
