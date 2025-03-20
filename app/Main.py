@@ -1,14 +1,12 @@
+import flask
 from flask import Flask
 
 app = Flask(__name__)
 
-def homepage():
-    return "Hello World!"
-
 @app.route("/")
-def homepage():
-    return "Hello World!"
+def Homepage():
+    return flask.render_template("Homepage.html")
 
-@app.route("/contatti")
-def contatti():
-    return "Contattaci!"
+@app.route("/login")
+def Login():
+    return flask.render_template("Login.html")
