@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SocialNetwork － Login</title>
-    <script type="text/javascript">
-function Login(username, password)
-{
-    alert(username, password);
-}
+    <script src="/static/login.js">
     </script>
 </head>
 <body>
@@ -19,7 +15,7 @@ function Login(username, password)
                 Username:
             </td>
             <td>
-                <input type="text" name="username" maxlength="16">
+                <input type="text" id="username" maxlength="16">
             </td>
         </tr>
         <tr>
@@ -27,7 +23,7 @@ function Login(username, password)
                 Password:
             </td>
             <td>
-                <input type="password" name="password">
+                <input type="password" id="password">
             </td>
         </tr>
     </table>
@@ -38,6 +34,6 @@ function Login(username, password)
     <br>
     <br>
 
-    <a href="register">Register</a>
+    <a href="/register">Register</a>
 </body>
 </html>
