@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>SocialNetwork － Login</title>
+    <script type="text/javascript">
+function Login(username, password)
+{
+    alert(username, password);
+}
+    </script>
 </head>
 <body>
     <h1>Login</h1>
@@ -27,7 +33,7 @@
     </table>
 
     <br>
-    <input type="button" value="Login">
+    <input type="button" value="Login" onclick="Login(username.value, password.value)">
 
     <br>
     <br>
