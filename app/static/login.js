@@ -1,4 +1,4 @@
 function Login(username, password)
 {
-    alert(username, password);
+    alert(username.value + password.value);
 }

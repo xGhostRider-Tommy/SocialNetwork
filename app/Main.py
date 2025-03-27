@@ -14,7 +14,3 @@ def Login():
 @app.route("/register")
 def Register():
     return flask.render_template("register.html")
-
-#@SocketIO.on("login")
-#def LoginSocket(json):
-#    print(json)

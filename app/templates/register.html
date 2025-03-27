@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>SocialNetwork － Register</title>
+    <script src="/static/register.js"></script>
 </head>
 <body>
     <h1>SocialNetwork － Register</h1>
@@ -13,7 +14,7 @@
                 Username:
             </td>
             <td>
-                <input type="text" name="username" maxlength="16">
+                <input type="text" id="username" maxlength="16">
             </td>
         </tr>
         <tr>
@@ -21,7 +22,7 @@
                 Email
             </td>
             <td>
-                <input type="email" name="email">
+                <input type="email" id="email">
             </td>
         </tr>
         <tr>
@@ -29,7 +30,7 @@
                 Password:
             </td>
             <td>
-                <input type="password" name="password">
+                <input type="password" id="password">
             </td>
         </tr>
         <tr>
@@ -37,13 +38,13 @@
                 Confirm Password:
             </td>
             <td>
-                <input type="password" name="password_confirmation">
+                <input type="password" id="password_confirmation">
             </td>
         </tr>
     </table>
 
     <br>
-    <input type="button" value="Register">
+    <input type="button" value="Register" onclick="Register(username, email, password, password_confirmation)">
 
     <br>
     <br>
