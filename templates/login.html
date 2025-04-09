@@ -30,7 +30,13 @@
 
         <br>
         <input type="submit" value="Login">
+
+        {% if error %}
+            <span style="color:red">&nbsp;{{ error }}</span> <!-- '&nbsp;' is a forced space -->
+        {% endif %}
+
     </form>
+
     <br>
     <br>
 
