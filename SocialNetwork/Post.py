@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import os
 
-from app.SocialNetwork.Hashtag import Hashtag
-from app.Utils.Image import Image
-from app.Utils.UniqueList import UniqueList
+from SocialNetwork.Hashtag import Hashtag
+from Utils.Image import Image
+from Utils.UniqueList import UniqueList
 
 
 #from SocialNetwork.User import User # added at the end for circular import
@@ -182,4 +182,4 @@ class Post:
             images.append(Image(imageName.split(".")[1], open(imageName, "rb").read()))
         return images
 
-from app.SocialNetwork.User import User
+from SocialNetwork.User import User
