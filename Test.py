@@ -1,9 +1,6 @@
 import os
 
-from SocialNetwork.Hashtag import Hashtag
-from SocialNetwork.Post import Post
 from SocialNetwork.User import User
-from Utils.UniqueList import UniqueList
 
 
 # RESET FOR TESTING THINGS
@@ -22,15 +19,13 @@ if not os.path.exists("Data"):
     file.write("")
     file.close()
 
+Reset(False)
+
 User.Register("ciao", "ciao@example.com", "ciao123")
 
 sessionID = User.Login("ciao", "ciao123")
 a = User.Authenticate("ciao", sessionID)
 
+print(a.Name)
 
-a.AddPost("ciaooo", UniqueList([Hashtag.getHashtag("myhashtag"), Hashtag.getHashtag("boh")]), [])
 
-print(Post.getPosts()[0].Description, Post.getPosts()[0].User.Name, Post.getPosts()[0].Hashtags)
-print(a.Posts[0].Description)
-
-Reset(False)

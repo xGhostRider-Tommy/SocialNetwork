@@ -1,5 +1,9 @@
+from __future__ import annotations
+
+import os
+
 import flask
-from flask import Flask, request, render_template, make_response, render_template_string, abort
+from flask import Flask, request, render_template, make_response, abort, redirect, url_for
 
 from SocialNetwork.User import User
 
@@ -11,7 +15,7 @@ app = Flask(__name__)
 def ErrorHandler():
     return render_template("404.html")
 
-@app.route("/")
+@app.route("/", methods = ["GET"])
 def Homepage():
     return flask.render_template("homepage.html")
 
@@ -26,7 +30,7 @@ def Login():
 
         sessionID = User.Login(username, password)
 
-        if sessionID is not str:
+        if not isinstance(sessionID, str):
             error: str
             if sessionID:
                 error = "Wrong password!"
@@ -34,8 +38,9 @@ def Login():
                 error = "No user!"
             return render_template("login.html", error = error)
 
-        response: flask.Response = make_response(render_template_string("<h1>\"Yeiiiii\", Mia moglie 2025</h1>"))
-        response.set_cookie("SessionID", sessionID)  # 7 days
+        response: flask.Response = make_response(redirect(url_for("Feed")))
+        response.set_cookie("SessionID", sessionID)
+        response.set_cookie("Username", username)
 
         return response
     else:
@@ -56,14 +61,41 @@ def Register():
         if not sessionID:
             return render_template("register.html", error = "Name already exists!")
 
-        response: flask.Response = make_response(render_template_string("<h1>\"Yeiiiii\", Mia moglie 2025</h1>"))
-        response.set_cookie("SessionID", sessionID)  # 7 days
+        response: flask.Response = make_response(redirect(url_for("Feed")))
+        response.set_cookie("SessionID", sessionID)
+        response.set_cookie("Username", username)
 
         return response
     else:
         abort(404)
 
+@app.route("/authenticate", methods = ["POST"])
+def Authenticate():
+    user: User = User.Authenticate(request.form["username"], request.form["sessionID"])
+    print(user)
+    if isinstance(user, User):
+        return render_template("feed.html")
+    else:
+        return redirect(url_for("Login"))
+
+@app.route("/feed", methods = ["GET"])
+def Feed():
+    return redirect(url_for("Authenticate"))
+
+
+# GENERATE DATA DEFAULT CONTENTS IF NOT EXISTS
+if not os.path.exists("Data"):
+    os.mkdir("Data")
+    os.mkdir("Data/Posts")
+    file = open("Data/users.csv", "w")
+    file.write("")
+    file.close()
+
 if app.debug:
-    from ClearData import ClearData
-    print("Clearing data...")
-    ClearData()
+    RESET: bool = True
+
+    if RESET:
+        from ClearData import ClearData
+
+        print("Clearing data...")
+        ClearData()
