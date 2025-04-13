@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 from datetime import datetime, timedelta
 
+from SocialNetwork.Globals import Globals
 from SocialNetwork.Hashtag import Hashtag
 from Utils.Hash import Hash, CheckHash
 from Utils.Image import Image
@@ -15,7 +16,6 @@ from Utils.UniqueList import UniqueList
 class User:
     __USERS_FILE: str = "Data/users.csv"
     __SESSION_ID_DURATION: timedelta = timedelta(days = 7)
-    __DATE_FORMAT: str = "%d/%m/%y"
     __SESSION_ID_LENGTH: int = 64 # 512 bit
 
     __Name: str
@@ -25,12 +25,19 @@ class User:
         self.__Name = name
 
     # use this
-    # str (sessionID) if success, None if name already exists
+    # str (sessionID) if success, None if name already exists, True Name too short or too long, False wrong chars
     @staticmethod
-    def Register(name: str, email: str, password: str) -> str | None:
+    def Register(name: str, email: str, password: str) -> str | bool | None:
         for user in User.getUsers():
             if user.__Name == name:
                 return None
+
+        if len(name) < Globals.MIN_LENGTH or len(name) > Globals.MAX_LENGTH:
+            return True
+
+        for c in name:
+            if c not in Globals.VALID_CHARS:
+                return False
 
         passwordHash: str = Hash(password)
 
@@ -101,7 +108,7 @@ class User:
         for i in range(len(oldFile)):
             if oldFile[i][0] == self.Name:
                 oldFile[i][3] = Hash(sessionID)
-                oldFile[i][4] = expiringDate.strftime(self.__DATE_FORMAT)
+                oldFile[i][4] = expiringDate.strftime(Globals.DATE_FORMAT)
                 break
 
         file = open(self.__USERS_FILE, "w")
@@ -139,7 +146,7 @@ class User:
         content: list[str] = self.getContent()
 
         sessionIDHash: str = content[3]
-        expiringDate: datetime = datetime.strptime(content[4], self.__DATE_FORMAT)
+        expiringDate: datetime = datetime.strptime(content[4], Globals.DATE_FORMAT)
 
         if expiringDate < datetime.today():
             return None

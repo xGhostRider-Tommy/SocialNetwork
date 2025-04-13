@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-class Hashtag:
-    __VALID_CHARS: str = "abcdefghijklmnopqrstuvwxyz1234567890"
+from SocialNetwork.Globals import Globals
 
+
+class Hashtag:
     __Text: str
 
     # do not use this
@@ -16,7 +17,7 @@ class Hashtag:
         hashtag: Hashtag
 
         for c in lowerText:
-            if c not in Hashtag.__VALID_CHARS:
+            if c not in Globals.VALID_CHARS:
                 return None
 
         hashtag = Hashtag()
