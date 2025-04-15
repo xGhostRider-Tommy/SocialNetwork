@@ -8,17 +8,32 @@ from flask import Flask, request, render_template, make_response, abort, redirec
 from SocialNetwork.Globals import Globals
 from SocialNetwork.User import User
 
-RESET: bool = True
-
 app = Flask(__name__)
 
 @app.errorhandler(404)
-def ErrorHandler():
-    return render_template("404.html")
+def ErrorHandler(error):
+    return render_template("404.html"), 404
 
-@app.route("/", methods = ["GET"])
-def Homepage():
-    return flask.render_template("homepage.html")
+@app.route("/", methods = ["GET", "POST"])
+def Feed():
+    if request.method == "GET":
+        return render_template("authenticate.html")
+    elif request.method == "POST":
+        return Authenticate()
+    else:
+        abort(404)
+
+@app.route("/homepage", methods = ["GET"])
+def homepage():
+    return render_template("homepage.html")
+
+def Authenticate() -> str | flask.Response:
+    user: User = User.Authenticate(request.form["username"], request.form["sessionID"])
+
+    if isinstance(user, User):
+        return render_template("feed.html")
+    else:
+        return redirect(url_for("homepage"))
 
 @app.route("/login", methods = ["POST", "GET"])
 def Login():
@@ -29,17 +44,18 @@ def Login():
         username: str = request.form['username']
         password: str = request.form['password']
 
-        sessionID = User.Login(username, password)
+        sessionID: str = User.Login(username, password)
 
         if not isinstance(sessionID, str):
             error: str
+
             if sessionID:
                 error = "Wrong password!"
             else:
                 error = "No user!"
             return render_template("login.html", error = error, min = Globals.MIN_LENGTH, max = Globals.MAX_LENGTH)
 
-        response: flask.Response = make_response(redirect(url_for("FeedRoute")))
+        response: flask.Response = make_response(redirect(url_for("Feed")))
         response.set_cookie("SessionID", sessionID)
         response.set_cookie("Username", username)
 
@@ -60,10 +76,11 @@ def Register():
         if username == "" or email == "" or password == "":
             return render_template("register.html", error = "All fields are required!", min = Globals.MIN_LENGTH, max = Globals.MAX_LENGTH)
 
-        sessionID = User.Register(username, email, password)
+        sessionID: str = User.Register(username, email, password)
 
         if not isinstance(sessionID, str):
             error: str
+
             if isinstance(sessionID, bool):
                 if sessionID:
                     error = f"Name should be between {Globals.MIN_LENGTH} and {Globals.MAX_LENGTH} characters long!"
@@ -74,7 +91,7 @@ def Register():
 
             return render_template("register.html", error = error, min = Globals.MIN_LENGTH, max = Globals.MAX_LENGTH)
 
-        response: flask.Response = make_response(redirect(url_for("FeedRoute")))
+        response: flask.Response = make_response(redirect(url_for("Feed")))
         response.set_cookie("SessionID", sessionID)
         response.set_cookie("Username", username)
 
@@ -82,29 +99,9 @@ def Register():
     else:
         abort(404)
 
-@app.route("/feed", methods = ["GET", "POST"])
-def FeedRoute():
-    if request.method == "GET":
-        return render_template("authenticate.html", action = "feed")
-    elif request.method == "POST":
-        return Authenticate()
-    else:
-        abort(404)
-
-def Feed() -> str | flask.Response:
-    return render_template("feed.html")
-
-def Authenticate() -> str | flask.Response:
-    user: User = User.Authenticate(request.form["username"], request.form["sessionID"])
-
-    if isinstance(user, User):
-        return Feed()
-    else:
-        return redirect(url_for("Login"))
-
 @app.route("/logout", methods = ["GET"])
 def Logout() -> str | flask.Response:
-    response: flask.Response = make_response(redirect(url_for("Homepage")))
+    response: flask.Response = make_response(redirect(url_for("Feed")))
     response.delete_cookie("SessionID")
     response.delete_cookie("Username")
 

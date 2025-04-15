@@ -26,6 +26,6 @@ window.onload = function()
       }
       else
       {
-            window.location.href = "/login";
+            window.location.href = "/homepage";
       }
 }

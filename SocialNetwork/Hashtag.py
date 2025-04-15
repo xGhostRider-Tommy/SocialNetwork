@@ -13,7 +13,7 @@ class Hashtag:
     # use this
     @staticmethod
     def getHashtag(text: str) -> Hashtag | None:
-        lowerText = text.lower() # mette minuscolo
+        lowerText: str = text.lower() # mette minuscolo
         hashtag: Hashtag
 
         for c in lowerText:
@@ -28,10 +28,10 @@ class Hashtag:
         return self.__Text
 
     @property
-    def Text(self):
+    def Text(self) -> str:
         return self.__Text
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, Hashtag):
             return self.Text == other.Text
         return False

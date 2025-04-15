@@ -50,7 +50,7 @@ class User:
     # str (sessionID) if success, bool if error: True = wrong password, False = no user
     @staticmethod
     def Login(name: str, password: str) -> str | bool:
-        user = User.getUser(name)
+        user: User = User.getUser(name)
 
         if user is None:
             return False
@@ -62,7 +62,7 @@ class User:
     # User if success, bool if error: True = wrong/expired sessionID, False = no user
     @staticmethod
     def Authenticate(name: str, sessionID: str) -> User | bool:
-        user = User.getUser(name)
+        user: User = User.getUser(name)
 
         if user is None:
             return False
@@ -119,14 +119,16 @@ class User:
 
         return sessionID
 
-    def AddPost(self, description: str, hashtags: UniqueList[Hashtag], images: list[Image]):
+    def AddPost(self, description: str, hashtags: UniqueList[Hashtag], images: list[Image]) -> None:
         Post.CreatePost(self, description, hashtags, images)
 
-    def Like(self, post: Post):
-        post.Like(self)
+    # True if success, False if error
+    def Like(self, post: Post) -> bool:
+        return post.Like(self)
 
-    def Unlike(self, post: Post):
-        post.Unlike(self)
+    # True if success, False if error
+    def Unlike(self, post: Post) -> bool:
+        return post.Unlike(self)
 
     @property
     def Name(self) -> str:
@@ -162,7 +164,7 @@ class User:
                 userPosts.append(post)
         return userPosts
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, User):
             return self.Name == other.Name
         return False

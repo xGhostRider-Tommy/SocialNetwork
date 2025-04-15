@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TypeVar, Generic, Iterator
 
-T = TypeVar("T")
+T: type = TypeVar("T")
 
 class UniqueList(Generic[T]):
     __List: list[T]
@@ -13,7 +13,8 @@ class UniqueList(Generic[T]):
         for element in list:
             if element not in self.__List:
                 self.__List.append(element)
-    
+
+    # True if success, False if error
     def Add(self, element: T) -> bool:
         condition: bool = element not in self.__List
         
@@ -21,7 +22,7 @@ class UniqueList(Generic[T]):
             self.__List.append(element)
         return condition
     
-    def Remove(self, index: int):
+    def Remove(self, index: int) -> None:
         self.__List.remove(index)
 
     def __len__(self) -> int:  # per far funzionare len(oggetto)

@@ -83,7 +83,7 @@ class Post:
         return posts
 
     @staticmethod
-    def getPostsByHashtag(hashtag: Hashtag):
+    def getPostsByHashtag(hashtag: Hashtag) -> list[Post]:
         allPosts: list[Post] = Post.getPosts()
         posts: list[Post] = []
 
@@ -94,7 +94,8 @@ class Post:
                     break
         return posts
 
-    def Like(self, user: User):
+    # True if success, False if error
+    def Like(self, user: User) -> bool:
         if not self.HasLiked(user):
             fileContent: list[str] = self.getContent()
             fileContent[3] += " " + user.Name
@@ -106,7 +107,11 @@ class Post:
             file.write(fileContent[3])
             file.close()
 
-    def Unlike(self, user: User):
+            return True
+        return False
+
+    # True if success, False if error
+    def Unlike(self, user: User) -> bool:
         if self.HasLiked(user):
             fileContent: list[str] = self.getContent()
             userNames: list[str] = fileContent[3].split(" ")
@@ -122,6 +127,9 @@ class Post:
             file.write(fileContent[2] + "\n")
             file.write(fileContent[3])
             file.close()
+
+            return True
+        return False
 
     def getContent(self) -> list[str]:
         file = open(self.__POSTS_DIRECTORY + self.Id + "/" + self.__INFO_FILE_NAME, "r")

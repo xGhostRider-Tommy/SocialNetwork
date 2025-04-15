@@ -33,14 +33,6 @@
                     <input type="password" name="password" minlength="8" required>
                 </td>
             </tr>
-            <tr>
-                <!-- <td>
-                    Confirm Password:
-                </td>
-                <td>
-                    <input type="password" name="password_confirmation">
-                </td> -->
-            </tr>
         </table>
 
         <br>
@@ -49,12 +41,10 @@
         {% if error %}
             <span style="color:red">&nbsp;{{ error }}</span> <!-- '&nbsp;' is a forced space -->
         {% endif %}
-
     </form>
 
     <br>
     <br>
-
     <a href="/login">Login</a>
 </body>
 </html>
