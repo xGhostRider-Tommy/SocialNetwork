@@ -17,23 +17,15 @@ def ErrorHandler(error):
 @app.route("/", methods = ["GET", "POST"])
 def Feed():
     if request.method == "GET":
-        return render_template("authenticate.html")
+        return render_template("authenticate.html", action = "/")
     elif request.method == "POST":
-        return Authenticate()
+        return Authenticate("feed.html")
     else:
         abort(404)
 
 @app.route("/homepage", methods = ["GET"])
 def homepage():
     return render_template("homepage.html")
-
-def Authenticate() -> str | flask.Response:
-    user: User = User.Authenticate(request.form["username"], request.form["sessionID"])
-
-    if isinstance(user, User):
-        return render_template("feed.html")
-    else:
-        return redirect(url_for("homepage"))
 
 @app.route("/login", methods = ["POST", "GET"])
 def Login():
@@ -99,6 +91,14 @@ def Register():
     else:
         abort(404)
 
+def Authenticate(html: str) -> str | flask.Response:
+    user: User = User.Authenticate(request.form["username"], request.form["sessionID"])
+
+    if isinstance(user, User):
+        return render_template(html)
+    else:
+        return redirect(url_for("homepage"))
+
 @app.route("/logout", methods = ["GET"])
 def Logout() -> str | flask.Response:
     response: flask.Response = make_response(redirect(url_for("Feed")))
@@ -106,6 +106,24 @@ def Logout() -> str | flask.Response:
     response.delete_cookie("Username")
 
     return response
+
+@app.route("/new_post", methods = ["GET", "POST"])
+def NewPost():
+    if request.method == "GET":
+        return render_template("authenticate.html", action = "/new_post")
+    elif request.method == "POST":
+        return Authenticate("new_post.html")
+    else:
+        abort(404)
+
+@app.route("/new_post/submit", methods = ["GET", "POST"]) # da fare
+def SubmitPost():
+    if request.method == "GET":
+        return render_template("authenticate.html", action = "/new_post/submit")
+    elif request.method == "POST":
+        return Authenticate("feed.html")
+    else:
+        abort(404)
 
 # GENERATE DATA DEFAULT CONTENTS IF NOT EXISTS
 if not os.path.exists("Data"):

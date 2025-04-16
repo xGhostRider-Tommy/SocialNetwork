@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SocialNetwork － New Post</title>
+</head>
+<body>
+    <form action="newpost" method="POST">
+        <table>
+            <tr>
+                <td>
+                    Images:
+                </td>
+                <td>
+                    <input type="file" name="images" accept="image/*" multiple>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Description
+                </td>
+                <td>
+                    <input type="text" name="description">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Hashtags:
+                </td>
+                <td>
+                  <input type="text" name="hashtags">
+                </td>
+            </tr>
+        </table>
+
+        <br>
+        <button type="submit">Publish</button>
+    </form>
+</body>
+</html>
