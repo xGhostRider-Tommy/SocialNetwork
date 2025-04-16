@@ -14,7 +14,7 @@ from Utils.UniqueList import UniqueList
 #from SocialNetwork.Post import Post # added at the end for circular import
 
 class User:
-    __USERS_FILE: str = "Data/users.csv"
+    __USERS_FILE: str = "Data/users.csv" # variabile privata: __
     __SESSION_ID_DURATION: timedelta = timedelta(days = 7)
     __SESSION_ID_LENGTH: int = 64 # 512 bit
 
@@ -26,7 +26,7 @@ class User:
 
     # use this
     # str (sessionID) if success, None if name already exists, True Name too short or too long, False wrong chars
-    @staticmethod
+    @staticmethod # puoi chiamare una funzione senza creare un oggetto
     def Register(name: str, email: str, password: str) -> str | bool | None:
         for user in User.getUsers():
             if user.__Name == name:
@@ -42,7 +42,7 @@ class User:
         passwordHash: str = Hash(password)
 
         file = open(User.__USERS_FILE, "a")
-        file.write(f"{name};{email};{passwordHash};;\n")
+        file.write(f"{name};{email};{passwordHash};;\n") # con f si concatenano le str
         file.close()
 
         return User(name).GenerateSessionID()
@@ -69,7 +69,7 @@ class User:
 
         if CheckHash(sessionID, user.SessionIDHash):
             return user
-        return True
+        return True # non serve mettere l'else perche' ha ritornato gia' prima
 
     @staticmethod
     def getUsers() -> list[User]:
@@ -104,6 +104,7 @@ class User:
         sessionID: str = RandomStr(self.__SESSION_ID_LENGTH)
         expiringDate: datetime = datetime.today() + self.__SESSION_ID_DURATION
 
+        # riscrive il file da capo per modificarlo
         oldFile: list[list[str]] = list(csv.reader(open(User.__USERS_FILE, "r"), delimiter=";"))
         for i in range(len(oldFile)):
             if oldFile[i][0] == self.Name:
@@ -164,7 +165,7 @@ class User:
                 userPosts.append(post)
         return userPosts
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other) -> bool: # per confrontare con ==
         if isinstance(other, User):
             return self.Name == other.Name
         return False

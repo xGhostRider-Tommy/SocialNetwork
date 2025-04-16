@@ -1,3 +1,4 @@
+# costanti utilizzate in piu' parti
 class Globals:
     VALID_CHARS: str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_"
     MIN_LENGTH: int = 4

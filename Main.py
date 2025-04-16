@@ -87,7 +87,7 @@ def Register():
                 else:
                     error = "Name should contain only alphanumeric characters and/or '_'!"
             else:
-                return "Name already exists!"
+                error = "Name already exists!"
 
             return render_template("register.html", error = error, min = Globals.MIN_LENGTH, max = Globals.MAX_LENGTH)
 

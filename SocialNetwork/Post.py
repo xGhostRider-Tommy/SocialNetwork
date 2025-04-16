@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import os
+import os  # libreria per leggere i file
 
 from SocialNetwork.Hashtag import Hashtag
 from Utils.Image import Image
@@ -98,6 +98,7 @@ class Post:
     def Like(self, user: User) -> bool:
         if not self.HasLiked(user):
             fileContent: list[str] = self.getContent()
+            # riscrive il file per modificarlo
             fileContent[3] += " " + user.Name
 
             file = open(self.__POSTS_DIRECTORY + self.Id + "/" + self.__INFO_FILE_NAME, "w")
