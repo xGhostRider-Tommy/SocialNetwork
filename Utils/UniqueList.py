@@ -35,11 +35,11 @@ class UniqueList(Generic[T]):
         return iter(self.__List)
 
     def __str__(self) -> str:
-        string: str = "["
+        string: str = ""
 
         for element in self.__List:
-            string += str(element) + ", "
-        string = string[:-2]  # leva gli ultimi due caratteri
-        string += "]"
+            string += str(element) + " "
+        string = string[:-1]  # leva l'ultimo spazio
+        string += ""
 
         return string

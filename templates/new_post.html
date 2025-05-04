@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>SocialNetwork － New Post</title>
+    <script src="js/authenticate.js"></script>
 </head>
 <body>
-    <form action="newpost" method="POST">
+    <form action="/new_post/submit" method="POST">
+        <input type="hidden" name="username" id="localUsername" value="">
+        <input type="hidden" name="sessionID" id="localSessionID" value="">
         <table>
             <tr>
                 <td>

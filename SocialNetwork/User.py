@@ -3,10 +3,11 @@ from __future__ import annotations
 import csv
 from datetime import datetime, timedelta
 
+from Utils.Image import Image
+
 from SocialNetwork.Globals import Globals
 from SocialNetwork.Hashtag import Hashtag
 from Utils.Hash import Hash, CheckHash
-from Utils.Image import Image
 from Utils.Random import RandomStr
 from Utils.UniqueList import UniqueList
 
@@ -59,17 +60,17 @@ class User:
             return user.GenerateSessionID()
         return True
 
-    # User if success, bool if error: True = wrong/expired sessionID, False = no user
+    # User if success, None if error
     @staticmethod
-    def Authenticate(name: str, sessionID: str) -> User | bool:
+    def Authenticate(name: str, sessionID: str) -> User | None:
         user: User = User.getUser(name)
 
         if user is None:
-            return False
+            return None
 
         if CheckHash(sessionID, user.SessionIDHash):
             return user
-        return True # non serve mettere l'else perche' ha ritornato gia' prima
+        return None # non serve mettere l'else perche' ha ritornato gia' prima
 
     @staticmethod
     def getUsers() -> list[User]:
@@ -161,7 +162,7 @@ class User:
         userPosts: list[Post] = []
 
         for post in posts:
-            if post.User == self:
+            if post.Author == self:
                 userPosts.append(post)
         return userPosts
 
