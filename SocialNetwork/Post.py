@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from SocialNetwork.Globals import Globals
 from SocialNetwork.Hashtag import Hashtag
 from Utils.UniqueList import UniqueList
 
@@ -7,9 +8,6 @@ from Utils.UniqueList import UniqueList
 #from SocialNetwork.User import User # added at the end for circular import
 
 class Post:
-    __POSTS_FILE: str = "Data/posts.csv"
-    __MAX_IMAGES_PER_POST: int = 10
-
     __Id: int
 
     # do not use this
@@ -19,24 +17,25 @@ class Post:
     # use this
     @staticmethod
     def CreatePost(user: User, description: str, hashtags: UniqueList[Hashtag], images: UniqueList[str]) -> Post:
-        fileContent: list[str] = open(Post.__POSTS_FILE, "r").read().split("\n")
+        fileContent: list[str] = open(Globals.POSTS_FILE, "r").read().split("\n")
         id: int = len(fileContent)
 
-        file = open(Post.__POSTS_FILE, "a")
-        if id != 0:
+        file = open(Globals.POSTS_FILE, "a")
+        if fileContent[0] != "":
             file.write("\n")
-        file.write(f"{user.Name};{description};{str(hashtags)};{images};")
+        file.write(f"{user.Name};{description};{str(hashtags)};{str(images)};")
         file.close()
 
         return Post(id)
 
     @staticmethod
     def getPosts() -> list[Post]:
-        postsData: list[str] = open(Post.__POSTS_FILE, "r").read().split("\n")
+        postsData: list[str] = open(Globals.POSTS_FILE, "r").read().split("\n")
         posts: list[Post] = []
 
-        for i in range(len(postsData) - 1, -1, -1): # for in reverse
-            posts.append(Post(i))
+        if postsData[0] != "":
+            for i in range(len(postsData) - 1, -1, -1):  # for in reverse
+                posts.append(Post(i))
         return posts
 
     @staticmethod
@@ -54,7 +53,7 @@ class Post:
     # True if success, False if error
     def Like(self, user: User) -> bool:
         if not self.HasLiked(user):
-            fileContent: list[str] = open(self.__POSTS_FILE, "r").read().split("\n")
+            fileContent: list[str] = open(Globals.POSTS_FILE, "r").read().split("\n")
 
             if self.Likes != 0:
                 fileContent[self.Id] += " "
@@ -65,7 +64,7 @@ class Post:
                 content += line + "\n"
             content = content[:-1]  # leva l'ultimo invio
 
-            file = open(self.__POSTS_FILE)
+            file = open(Globals.POSTS_FILE)
             file.write(content)
             file.close()
 
@@ -83,7 +82,7 @@ class Post:
                     names.Remove(i)
                     break
 
-            fileContent: list[str] = open(self.__POSTS_FILE, "r").read().split("\n")
+            fileContent: list[str] = open(Globals.POSTS_FILE, "r").read().split("\n")
             fileContent[self.Id] = f"{self.Author};{self.Description};{str(self.Hashtags)};{self.Images};{names}"
 
             content: str = ""
@@ -91,7 +90,7 @@ class Post:
                 content += line + "\n"
             content = content[:-1]  # leva l'ultimo invio
 
-            file = open(self.__POSTS_FILE, "w")
+            file = open(Globals.POSTS_FILE, "w")
             file.write(content)
             file.close()
 
@@ -99,7 +98,7 @@ class Post:
         return False
 
     def getContent(self) -> list[str]:
-        postsContent: list[str] = open(self.__POSTS_FILE, "r").read().split("\n")
+        postsContent: list[str] = open(Globals.POSTS_FILE, "r").read().split("\n")
         return postsContent[self.Id].split(";")
 
     def getUserLikes(self) -> UniqueList[User]:

@@ -7,6 +7,7 @@ from flask import Flask, request, render_template, make_response, abort, redirec
 
 from SocialNetwork.Globals import Globals
 from SocialNetwork.Hashtag import Hashtag
+from SocialNetwork.Post import Post
 from SocialNetwork.User import User
 from Utils.Random import RandomStr
 from Utils.UniqueList import UniqueList
@@ -33,7 +34,25 @@ def Feed():
             action = "/"
         )
     elif request.method == "POST":
-        return AuthenticateAndRender("feed.html")
+        authenticateResult: tuple[bool, User] = Authenticate()
+        if authenticateResult[0]:
+            posts: list[Post] = Post.getPosts()
+            postsHtml: str = ""
+
+            for post in posts:
+                images: str = ""
+                for image in post.Images:
+                    images += render_template("feed.post.image.html", image = image)
+
+                postsHtml += render_template(
+                    "feed.post.html",
+                    images = images,
+                    author = post.Author.Name,
+                    description = post.Description,
+                    hashtags = str(post.Hashtags)
+                )
+            return render_template("feed.html", posts = postsHtml)
+        return redirect(url_for("Homepage"))
     abort(404)
 
 @app.route("/homepage", methods = ["GET"])
@@ -45,8 +64,8 @@ def Login():
     if request.method == "GET":
         return flask.render_template(
             "login.html",
-            min = Globals.MIN_LENGTH,
-            max = Globals.MAX_LENGTH
+            min = Globals.MIN_USERNAME_LENGTH,
+            max = Globals.MAX_USERNAME_LENGTH
         )
 
     elif request.method == "POST":
@@ -66,8 +85,8 @@ def Login():
             return render_template(
                 "login.html",
                 error = error,
-                min = Globals.MIN_LENGTH,
-                max = Globals.MAX_LENGTH
+                min = Globals.MIN_USERNAME_LENGTH,
+                max = Globals.MAX_USERNAME_LENGTH
             )
 
         response: flask.Response = make_response(redirect(url_for("Feed")))
@@ -82,8 +101,8 @@ def Register():
     if request.method == "GET":
         return flask.render_template(
             "register.html",
-            min = Globals.MIN_LENGTH,
-            max = Globals.MAX_LENGTH
+            min = Globals.MIN_USERNAME_LENGTH,
+            max = Globals.MAX_USERNAME_LENGTH
         )
 
     elif request.method == "POST":
@@ -95,8 +114,8 @@ def Register():
             return render_template(
                 "register.html",
                 error = "All fields are required!",
-                min = Globals.MIN_LENGTH,
-                max = Globals.MAX_LENGTH
+                min = Globals.MIN_USERNAME_LENGTH,
+                max = Globals.MAX_USERNAME_LENGTH
             )
 
         sessionID: str = User.Register(username, email, password)
@@ -106,7 +125,7 @@ def Register():
 
             if isinstance(sessionID, bool):
                 if sessionID:
-                    error = f"Name should be between {Globals.MIN_LENGTH} and {Globals.MAX_LENGTH} characters long!"
+                    error = f"Name should be between {Globals.MIN_USERNAME_LENGTH} and {Globals.MAX_USERNAME_LENGTH} characters long!"
                 else:
                     error = "Name should contain only alphanumeric characters and/or '_'!"
             else:
@@ -115,8 +134,8 @@ def Register():
             return render_template(
                 "register.html",
                 error = error,
-                min = Globals.MIN_LENGTH,
-                max = Globals.MAX_LENGTH
+                min = Globals.MIN_USERNAME_LENGTH,
+                max = Globals.MAX_USERNAME_LENGTH
             )
 
         response: flask.Response = make_response(redirect(url_for("Feed")))
@@ -129,13 +148,6 @@ def Register():
 def Authenticate() -> tuple[bool, User]:
     user: User = User.Authenticate(request.form["username"], request.form["sessionID"])
     return isinstance(user, User), user
-
-def AuthenticateAndRender(html: str) -> str | flask.request:
-    success: bool = Authenticate()[0]
-
-    if success:
-        return render_template(html)
-    return redirect(url_for("Feed"))
 
 @app.route("/logout", methods = ["GET"])
 def Logout() -> str | flask.Response:
@@ -153,7 +165,10 @@ def NewPost():
             action = "/new_post"
         )
     elif request.method == "POST":
-        return AuthenticateAndRender("new_post.html")
+        authenticateResult: tuple[bool, User] = Authenticate()
+        if authenticateResult[0]:
+            return render_template("new_post.html")
+        return redirect(url_for("Feed"))
     abort(404)
 
 @app.route("/new_post/submit", methods = ["POST"]) # da fare
@@ -181,6 +196,7 @@ def SubmitPost():
 
             hashtags: UniqueList[Hashtag] = UniqueList([])
             hashtagsStr: list[str] = (request.form["hashtags"]
+                .replace(" #", " ")
                 .replace("# ", " ")
                 .replace("#", " ")
                 .split(" ")
@@ -192,7 +208,7 @@ def SubmitPost():
             authenticateResult[1].AddPost(
                 request.form["description"],
                 hashtags,
-                imagesList
+                UniqueList(imagesList)
             )
             return redirect(url_for("Feed"))
     abort(400)
@@ -211,11 +227,12 @@ if not os.path.exists("Data"):
 if not os.path.exists("static/images"):
     os.mkdir("static/images")
 
-if app.debug:
-    RESET: bool = False
+if app.debug: # per testing
+    RESET_USERS: bool = False
+    RESET_POSTS: bool = True
 
-    if RESET:
+    if RESET_USERS or RESET_POSTS:
         from ClearData import ClearData
 
         print("Clearing data...")
-        ClearData()
+        ClearData(RESET_USERS, RESET_POSTS)

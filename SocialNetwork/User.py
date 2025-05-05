@@ -3,8 +3,6 @@ from __future__ import annotations
 import csv
 from datetime import datetime, timedelta
 
-from Utils.Image import Image
-
 from SocialNetwork.Globals import Globals
 from SocialNetwork.Hashtag import Hashtag
 from Utils.Hash import Hash, CheckHash
@@ -15,8 +13,7 @@ from Utils.UniqueList import UniqueList
 #from SocialNetwork.Post import Post # added at the end for circular import
 
 class User:
-    __USERS_FILE: str = "Data/users.csv" # variabile privata: __
-    __SESSION_ID_DURATION: timedelta = timedelta(days = 7)
+    __SESSION_ID_DURATION: timedelta = timedelta(days = 7) # variabile privata: __
     __SESSION_ID_LENGTH: int = 64 # 512 bit
 
     __Name: str
@@ -33,7 +30,7 @@ class User:
             if user.__Name == name:
                 return None
 
-        if len(name) < Globals.MIN_LENGTH or len(name) > Globals.MAX_LENGTH:
+        if len(name) < Globals.MIN_USERNAME_LENGTH or len(name) > Globals.MAX_USERNAME_LENGTH:
             return True
 
         for c in name:
@@ -42,7 +39,7 @@ class User:
 
         passwordHash: str = Hash(password)
 
-        file = open(User.__USERS_FILE, "a")
+        file = open(Globals.USERS_FILE, "a")
         file.write(f"{name};{email};{passwordHash};;\n") # con f si concatenano le str
         file.close()
 
@@ -74,7 +71,7 @@ class User:
 
     @staticmethod
     def getUsers() -> list[User]:
-        file = csv.reader(open(User.__USERS_FILE, "r",), delimiter=";")
+        file = csv.reader(open(Globals.USERS_FILE, "r",), delimiter=";")
         users: list[User] = []
 
         for line in file:
@@ -93,7 +90,7 @@ class User:
         return None
 
     def getContent(self) -> list[str]:
-        file = csv.reader(open(User.__USERS_FILE, "r"), delimiter=";")
+        file = csv.reader(open(Globals.USERS_FILE, "r"), delimiter=";")
 
         for line in file:
             if line[0] == self.Name:
@@ -106,14 +103,14 @@ class User:
         expiringDate: datetime = datetime.today() + self.__SESSION_ID_DURATION
 
         # riscrive il file da capo per modificarlo
-        oldFile: list[list[str]] = list(csv.reader(open(User.__USERS_FILE, "r"), delimiter=";"))
+        oldFile: list[list[str]] = list(csv.reader(open(Globals.USERS_FILE, "r"), delimiter=";"))
         for i in range(len(oldFile)):
             if oldFile[i][0] == self.Name:
                 oldFile[i][3] = Hash(sessionID)
                 oldFile[i][4] = expiringDate.strftime(Globals.DATE_FORMAT)
                 break
 
-        file = open(self.__USERS_FILE, "w")
+        file = open(Globals.USERS_FILE, "w")
 
         for line in oldFile:
             file.write(f"{line[0]};{line[1]};{line[2]};{line[3]};{line[4]}\n")
@@ -121,7 +118,7 @@ class User:
 
         return sessionID
 
-    def AddPost(self, description: str, hashtags: UniqueList[Hashtag], images: list[Image]) -> None:
+    def AddPost(self, description: str, hashtags: UniqueList[Hashtag], images: UniqueList[str]) -> None:
         Post.CreatePost(self, description, hashtags, images)
 
     # True if success, False if error
