@@ -7,19 +7,24 @@
         h1{font-family: "Segoe UI";}
         p{font-family: "Segoe UI";}
         img{width: 300px; height: 200px;}
+        #pulsante{margin-left: 90%;}
     </style>
 </head>
 <body>
     <h1>
-        Your Feed
+        Feed
     </h1>
-    <a href="/new_post">Create New Post</a>
+    <input type="button" value="+" id="pulsante" onclick="location.href = '/new_post'">
     <br>
     <br>
     <a href="/logout" id="login">Logout</a>
     <br>
     <br>
     <br>
-    {{ posts | safe }}
+    {{ posts | safe }}  <!--
+                            safe: permette di aggiungere html e non solo stringhe al codice
+                            tutto lo style in feed.html sara' valido in feed.post.html e
+                            feed.post.image.html
+                        -->
 </body>
 </html>

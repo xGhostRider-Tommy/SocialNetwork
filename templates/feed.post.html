@@ -1,6 +1,17 @@
-{{ images | safe}}
-<br>
-<b>{{ author }}</b>
-<p>{{ description }}</p>
-<p>{{ hashtags }}</p>
-<br>
+<table>
+    <tr>
+        <td>
+            <b>{{ author }}</b>
+            <br>
+            {{ images | safe }}
+        </td>
+        <td>
+            <p>{{ description }}</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>{{ hashtags }}</p>
+        </td>
+    </tr>
+</table>
