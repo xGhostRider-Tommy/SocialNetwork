@@ -12,7 +12,7 @@ Hi! This is a school project. We have decided to re-create a simplified version 
 - All **libraries** in `requirements.txt`
 
 **NOTE**: If you are using Windows, you need to have the Python installation installed to "All Users" as I didn't add the proper batch script to run the flask. You and still create yours and run it.
-Just make shure that this command is runned before running Flask at ANY new cmd instance:
+Just make sure that this command is run before running Flask at ANY new cmd instance:
 `set FLASK_APP=app\Main.py`
 
 ## Running
