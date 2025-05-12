@@ -1,13 +1,13 @@
 # Welcome to SocialNetwork!
 
-Ciao! Questo e' un progetto per scuola. Abbiamo deciso di ricreare un Social Network semplificato con interfaccia web. Il back-end e' scritto in **Python** utilizzando **Flask** mentre il front-end e' scritto in **HTML** e **JavaScript**.
+Hi! This is a school project. We have decided to re-create a simplified version of a SocialNetwork with Web a interface. Back-End written in **Python** using **Flask**. Front-End written in **HTML** and **JavaScript**.
 
 
 # Run
 
 ## Requirements
-- Almeno **Python 3.9** o successivi
-- Tutte le **librerie** in `requirements.txt`
+- **Python 3.9<=**
+- All **libraries** in `requirements.txt`
 
 **NOTE**: If you are using Windows, you need to have the Python installation installed to "All Users" as I didn't add the proper batch script to run the flask. You and still create yours and run it.
 Just make shure that this command is runned before running Flask at ANY new cmd instance:
