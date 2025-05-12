@@ -26,34 +26,9 @@ def Error404(error):
 def Error400(error):
     return render_template("400.html"), 400
 
-@app.route("/", methods = ["GET", "POST"])
-def Feed():
-    if request.method == "GET":
-        return render_template(
-            "authenticate.html",
-            action = "/"
-        )
-    elif request.method == "POST":
-        authenticateResult: tuple[bool, User] = Authenticate()
-        if authenticateResult[0]:
-            posts: list[Post] = Post.getPosts()
-            postsHtml: str = ""
-
-            for post in posts:
-                images: str = ""
-                for image in post.Images:
-                    images += render_template("feed.post.image.html", image = image)
-
-                postsHtml += render_template(
-                    "feed.post.html",
-                    images = images,
-                    author = post.Author.Name,
-                    description = post.Description,
-                    hashtags = str(post.Hashtags)
-                )
-            return render_template("feed.html", posts = postsHtml)
-        return redirect(url_for("Homepage"))
-    abort(404)
+@app.route("/", methods = ["GET"])
+def Root():
+    return redirect(url_for("Feed"))
 
 @app.route("/homepage", methods = ["GET"])
 def Homepage():
@@ -157,6 +132,53 @@ def Logout() -> str | flask.Response:
 
     return response
 
+@app.route("/feed", methods = ["GET", "POST"])
+def Feed():
+    if request.method == "GET":
+        return render_template(
+            "authenticate.html",
+            action = "/feed"
+        )
+    elif request.method == "POST":
+        authenticateResult: tuple[bool, User] = Authenticate()
+        if authenticateResult[0]:
+            posts: list[Post] = Post.getPosts()
+            postsHtml: str = ""
+
+            for post in posts:
+                images: str = ""
+                for image in post.Images:
+                    images += render_template("feed.post.image.html", image = image)
+
+                postsHtml += render_template(
+                    "feed.post.html",
+                    images = images,
+                    author = post.Author.Name,
+                    description = post.Description,
+                    hashtags = str(post.Hashtags),
+                    id = post.Id
+                )
+            return render_template("feed.html", posts = postsHtml)
+        return redirect(url_for("Homepage"))
+    abort(404)
+
+@app.route("/feed/like", methods=["POST"])
+def LikePost():
+    if request.method == "POST":
+        authenticateResult: tuple[bool, User] = Authenticate()
+        if authenticateResult[0]:
+            id: int
+            try:
+                id = int(request.form["id"])
+            except ValueError:
+                abort(404)
+
+            post: Post = Post(id)
+            post.Like(authenticateResult[1])
+
+            return redirect(url_for("Feed"))
+    abort(400)
+
 @app.route("/new_post", methods = ["GET", "POST"])
 def NewPost():
     if request.method == "GET":
@@ -171,7 +193,7 @@ def NewPost():
         return redirect(url_for("Feed"))
     abort(404)
 
-@app.route("/new_post/submit", methods = ["POST"]) # da fare
+@app.route("/new_post/submit", methods = ["POST"])
 def SubmitPost():
     if request.method == "POST":
         authenticateResult: tuple[bool, User] = Authenticate()

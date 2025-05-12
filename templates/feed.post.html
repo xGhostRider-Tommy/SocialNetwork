@@ -14,4 +14,10 @@
             <p>{{ hashtags }}</p>
         </td>
     </tr>
+
+    <form id="AutoForm" action="/feed/like" method="POST">
+        <input type="hidden" name="username" id="localUsername" value="">
+        <input type="hidden" name="sessionID" id="localSessionID" value="">
+        <input type="hidden" name="id" id="id" value="{{ id }}">
+    </form>
 </table>
