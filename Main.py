@@ -150,12 +150,20 @@ def Feed():
                 for image in post.Images:
                     images += render_template("feed.post.image.html", image = image)
 
+                textButton: str
+                if post.HasLiked(authenticateResult[1]):
+                    textButton = "Unlike"
+                else:
+                    textButton = "Like"
+
                 postsHtml += render_template(
                     "feed.post.html",
                     images = images,
                     author = post.Author.Name,
                     description = post.Description,
                     hashtags = str(post.Hashtags),
+                    likes = post.Likes,
+                    textButton = textButton,
                     id = post.Id
                 )
             return render_template("feed.html", posts = postsHtml)
