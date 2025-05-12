@@ -1,6 +1,6 @@
 # Welcome to SocialNetwork!
 
-Hi! This is a school project. We have decided to re-create a simplified version of a SocialNetwork with Web a interface. Back-End written in **Python** using **Flask**. Front-End written in **HTML** and **JavaScript**.
+Hi! This is a school project. We have decided to re-create a simplified version of a **SocialNetwork** with a **Web interface**. Back-End written in **Python** using **Flask**. Front-End written in **HTML** and **JavaScript**.
 
 
 # Run
