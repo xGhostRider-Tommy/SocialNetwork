@@ -52,17 +52,20 @@ class Post:
 
     # True if success, False if error
     def Like(self, user: User):
-        if self.HasLiked(user):
-            # Unlike
-            names: UniqueList[User] = self.getUserLikes()
+        if self.HasLiked(user): # Unlike
+            users: UniqueList[User] = self.getUserLikes()
+            names: UniqueList[str] = UniqueList([])
+
+            for currentUser in users:
+                names.Add(currentUser.Name)
 
             for i in range(len(names) + 1):
-                if names[i].Name == user.Name:
+                if names[i] == user.Name:
                     names.Remove(i)
                     break
 
             fileContent: list[str] = open(Globals.POSTS_FILE, "r").read().split("\n")
-            fileContent[self.Id] = f"{self.Author};{self.Description};{str(self.Hashtags)};{self.Images};{names}"
+            fileContent[self.Id] = f"{self.Author.Name};{self.Description};{str(self.Hashtags)};{self.Images};{names}"
 
             content: str = ""
             for line in fileContent:
@@ -72,8 +75,7 @@ class Post:
             file = open(Globals.POSTS_FILE, "w")
             file.write(content)
             file.close()
-        else:
-            # Like
+        else: # Like
             fileContent: list[str] = open(Globals.POSTS_FILE, "r").read().split("\n")
 
             if self.Likes != 0:
@@ -85,7 +87,7 @@ class Post:
                 content += line + "\n"
             content = content[:-1]  # leva l'ultimo invio
 
-            file = open(Globals.POSTS_FILE)
+            file = open(Globals.POSTS_FILE, "w")
             file.write(content)
             file.close()
 

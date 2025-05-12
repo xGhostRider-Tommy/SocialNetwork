@@ -23,7 +23,7 @@ class UniqueList(Generic[T]):
         return condition
     
     def Remove(self, index: int) -> None:
-        self.__List.remove(index)
+        self.__List.pop(index)
 
     def __len__(self) -> int:  # per far funzionare len(oggetto)
         return len(self.__List)
