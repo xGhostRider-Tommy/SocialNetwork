@@ -1,24 +1,21 @@
-<table>
-    <tr>
-        <td>
-            <b>{{ author }}</b>
-            <br>
+<center>
+    <div>
+        <p>
+            <h2>{{ author }}</h2>
             {{ images | safe }}
-        </td>
-        <td>
+            <br>
+            <h3>
+                ❤️{{ likes }}
+                <form id="Like" action="/feed/like" method="POST">
+                    <input type="hidden" name="username" id="localUsername" value="">
+                    <input type="hidden" name="sessionID" id="localSessionID" value="">
+                    <input type="hidden" name="id" id="id" value="{{ id }}">
+                    <button type="submit">{{ textButton }}</button>
+                </form>
+            </h3>
+
             <p>{{ description }}</p>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <p>{{ hashtags }}</p>
-        </td>
-    </tr>
-    ❤️{{ likes }}
-    <form id="Like" action="/feed/like" method="POST">
-        <input type="hidden" name="username" id="localUsername" value="">
-        <input type="hidden" name="sessionID" id="localSessionID" value="">
-        <input type="hidden" name="id" id="id" value="{{ id }}">
-        <button type="submit">{{ textButton }}</button>
-    </form>
-</table>
+        </p>
+    </div>
+</center>
