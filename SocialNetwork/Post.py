@@ -132,7 +132,7 @@ class Post:
         hashtags: UniqueList[Hashtag] = UniqueList([])
 
         for hashtagString in hashtagsStrings:
-            hashtags.Add(Hashtag.getHashtag(hashtagString))
+            hashtags.Add(Hashtag(hashtagString))
         return hashtags
 
     @property

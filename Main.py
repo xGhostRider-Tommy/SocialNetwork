@@ -134,16 +134,27 @@ def Logout() -> str | flask.Response:
 
 @app.route("/feed", methods = ["GET", "POST"])
 def Feed():
+    query: str = request.args.get("hashtag", default = "")
+
     if request.method == "GET":
+        if query != "":
+            query = "?hashtag=" + query
+
         return render_template(
             "authenticate.html",
-            action = "/feed"
+            action = "/feed" + query
         )
     elif request.method == "POST":
         authenticateResult: tuple[bool, User] = Authenticate()
         if authenticateResult[0]:
-            posts: list[Post] = Post.getPosts()
+            posts: list[Post]
             postsHtml: str = ""
+
+            if query == "":
+                posts = Post.getPosts()
+            else:
+                posts = Post.getPostsByHashtag(Hashtag(query))
+
 
             for post in posts:
                 images: str = ""
@@ -233,7 +244,7 @@ def SubmitPost():
             )
 
             for hashtag in hashtagsStr:
-                hashtags.Add(Hashtag.getHashtag(hashtag))
+                hashtags.Add(Hashtag(hashtag))
 
             authenticateResult[1].AddPost(
                 request.form["description"],

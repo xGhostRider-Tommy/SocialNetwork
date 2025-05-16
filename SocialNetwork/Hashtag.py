@@ -6,23 +6,19 @@ from SocialNetwork.Globals import Globals
 class Hashtag:
     __Text: str
 
-    # do not use this
-    def __init__(self):
-        pass
+    def __init__(self, text: str):
+        lowerText: str = text.lower()  # mette minuscolo
+        textStr: list[str] = list(lowerText)
+        formattedText: str = ""
 
-    # use this
-    @staticmethod
-    def getHashtag(text: str) -> Hashtag | None:
-        lowerText: str = text.lower() # mette minuscolo
-        hashtag: Hashtag
+        for i in range(0, len(textStr)):
+            if textStr[i] not in Globals.VALID_CHARS:
+                textStr[i] = "_" # if char not valid, change it to an underscore _
 
-        for c in lowerText:
-            if c not in Globals.VALID_CHARS:
-                return None
+        for i in range(0, len(textStr)):
+            formattedText += textStr[i]
 
-        hashtag = Hashtag()
-        hashtag.__Text = lowerText
-        return hashtag
+        self.__Text = formattedText
 
     def __str__(self) -> str:
         return self.__Text
