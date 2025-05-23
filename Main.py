@@ -270,7 +270,7 @@ if not os.path.exists("static/images"):
 
 if app.debug: # per testing
     RESET_USERS: bool = False
-    RESET_POSTS: bool = True
+    RESET_POSTS: bool = False
 
     if RESET_USERS or RESET_POSTS:
         from ClearData import ClearData
