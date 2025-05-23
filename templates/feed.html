@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>SocialNetwork 2.0 － Your Feed</title>
     <script src="js/authenticate.js"></script>
+    <script src="js/feed.js"></script>
     <style>
-        h1{font-family: "Segoe UI"; text-align: center;}
+        h1{font-family: "Segoe UI"; text-align: center}
         h2{font-family: "Segoe UI"; text-align: left;}
         h3{font-family: "Segoe UI"; text-align: left}
         p{font-family: "Segoe UI"; text-align: left;}
+        a{text-align: right;}
+        #button_add{margin-left: 90%;}
         img{width: 500px; height: 400px;}
-        #pulsante{margin-left: 90%;}
         div{width: 40%;}
         input{font-family: "Segoe UI"; text-align: left;}
         form{width: 100px; display: inline;}
@@ -20,10 +22,14 @@
     <h1>
         Feed
     </h1>
-    <input type="button" value="+" id="pulsante" onclick="location.href = '/new_post'">
-    <br>
-    <br>
     <a href="/logout" id="login">Logout</a>
+    <br>
+    <input type="button" value="+" id="button_add" onclick="Add()">
+    <br>
+    <br>
+    <br>
+    <input type="text" id="search">
+    <input type="button" value="Search" onclick="Search()">
     <br>
     <br>
     <br>

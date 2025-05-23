@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>SocialNetwork － Register</title>
+    <style>
+        span{color: red}
+    </style>
 </head>
 <body>
     <h1>SocialNetwork 2.0 － Register</h1>
@@ -39,7 +42,7 @@
         <input type="submit" value="Register">
 
         {% if error %}
-            <span style="color:red">&nbsp;{{ error }}</span> <!-- '&nbsp;' is a forced space -->
+            <span>&nbsp;{{ error }}</span> <!-- '&nbsp;' is a forced space -->
         {% endif %}
     </form>
 
