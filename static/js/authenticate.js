@@ -17,7 +17,7 @@ const localSessionID = getCookie("SessionID");
 
 window.onload = function()
 {
-      if (localUsername && localSessionID)
+      if (localUsername && localSessionID) // and
       {
             document.getElementById("localUsername").value = localUsername;
             document.getElementById("localSessionID").value = localSessionID;

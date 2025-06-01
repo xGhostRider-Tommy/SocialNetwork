@@ -125,10 +125,6 @@ class User:
     def Like(self, post: Post) -> bool:
         return post.Like(self)
 
-    # True if success, False if error
-    def Unlike(self, post: Post) -> bool:
-        return post.Unlike(self)
-
     @property
     def Name(self) -> str:
         return self.__Name

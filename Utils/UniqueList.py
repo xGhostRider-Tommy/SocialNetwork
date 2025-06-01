@@ -4,6 +4,7 @@ from typing import TypeVar, Generic, Iterator
 
 T: type = TypeVar("T")
 
+# lista che non contiene duplicati
 class UniqueList(Generic[T]):
     __List: list[T]
 

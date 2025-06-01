@@ -19,11 +19,11 @@ def HandleStatic(filename):
     return send_from_directory("static", filename)
 
 @app.errorhandler(404)
-def Error404(error):
+def Error404(error): # pagina non trovata
     return render_template("404.html"), 404
 
 @app.errorhandler(400)
-def Error400(error):
+def Error400(error): # bad request
     return render_template("400.html"), 400
 
 @app.route("/", methods = ["GET"])
@@ -69,7 +69,7 @@ def Login():
         response.set_cookie("Username", username)
 
         return response
-    abort(404)
+    abort(400)
 
 @app.route("/register", methods = ["POST", "GET"])
 def Register():
@@ -118,7 +118,7 @@ def Register():
         response.set_cookie("Username", username)
 
         return response
-    abort(404)
+    abort(400)
 
 def Authenticate() -> tuple[bool, User]:
     user: User = User.Authenticate(request.form["username"], request.form["sessionID"])
@@ -134,7 +134,7 @@ def Logout() -> str | flask.Response:
 
 @app.route("/feed", methods = ["GET", "POST"])
 def Feed():
-    query: str = request.args.get("hashtag", default = "")
+    query: str = request.args.get("hashtag", default = "") # /login?hashtag=ciao
 
     if request.method == "GET":
         if query != "":
@@ -145,7 +145,7 @@ def Feed():
             action = "/feed" + query
         )
     elif request.method == "POST":
-        authenticateResult: tuple[bool, User] = Authenticate()
+        authenticateResult: tuple[bool, User] = Authenticate() # bool e' True/False
         if authenticateResult[0]:
             posts: list[Post]
             postsHtml: str = ""
@@ -179,7 +179,7 @@ def Feed():
                 )
             return render_template("feed.html", posts = postsHtml)
         return redirect(url_for("Homepage"))
-    abort(404)
+    abort(400)
 
 @app.route("/feed/like", methods=["POST"])
 def LikePost():
@@ -210,7 +210,7 @@ def NewPost():
         if authenticateResult[0]:
             return render_template("new_post.html")
         return redirect(url_for("Feed"))
-    abort(404)
+    abort(400)
 
 @app.route("/new_post/submit", methods = ["POST"])
 def SubmitPost():
