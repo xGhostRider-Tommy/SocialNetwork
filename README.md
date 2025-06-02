@@ -11,7 +11,7 @@ Hi! This is a school project. We have decided to re-create a simplified version 
 - **Python 3.9<=**
 - All **libraries** in `requirements.txt`
 
-**NOTE**: If you are using Windows, you need to have the Python installation installed to "All Users" as I didn't add the proper batch script to run Flask. You and still create yours and run it.
+**NOTE**: If you are using Windows, you need to have the Python installation installed to "All Users" as I didn't add the proper batch script to run Flask. You can still create yours and run it.
 Just make sure that this command is run before running Flask at ANY new cmd instance:
 `set FLASK_APP=app\Main.py`
 
