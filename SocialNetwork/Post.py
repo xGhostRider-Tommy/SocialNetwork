@@ -10,7 +10,7 @@ from Utils.UniqueList import UniqueList
 class Post:
     __Id: int
 
-    # do not use this
+    # do not use this outside of the class
     def __init__(self, id: int):
         self.__Id = id
 

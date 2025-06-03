@@ -18,7 +18,7 @@ class User:
 
     __Name: str
 
-    # do not use this
+    # do not use this outside of the class
     def __init__(self, name: str):
         self.__Name = name
 
@@ -160,7 +160,7 @@ class User:
         return userPosts
 
     def __eq__(self, other) -> bool: # per confrontare con ==
-        if isinstance(other, User):
+        if isinstance(other, User): # verifica se due variabili sono dello stesso tipo
             return self.Name == other.Name
         return False
 
